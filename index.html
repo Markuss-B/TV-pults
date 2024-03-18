@@ -1,0 +1,541 @@
+<!-- Autors: Markuss Birznieks -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Remote</title>
+    <style>
+        * {
+            font-family: monospace;
+        }
+        .remote-body {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 500px;
+            width: 160px;
+            border: 4px outset rgb(220, 220, 220);
+            border-radius: 24px;
+            background: rgb(166,124,34);
+            background: linear-gradient(0deg, rgba(166,124,34,1) 6%, rgba(87,140,128,1) 50%);
+            padding-top: 10px;
+        }
+
+        .power-btn {
+            width: 30%;
+            border-radius: 10px;
+            background-color: #77bfaf;
+            color: #276e77;
+            border-color: rgb(197, 197, 197);
+        }
+
+        .activity-screen {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            width: 80%;
+            height: 40px;
+            border-width: 3.5px;
+            border-radius: 10px;
+            border-style: inset;
+            border-color: #2cc2a2;
+            background-color: #76a89d;
+            font-size: large;
+        }
+        .volume {
+            margin-left: 5px;
+        }
+        .volume .hl {
+            height: 0.5px;
+            width: 10px;
+            background-color: #b5be2e;
+            margin: 2px;
+            border-radius: 1px;
+            border-style: dotted;
+            border-width: 2px;
+            border-color: #b5be2e;
+        }
+        .activity {
+            color: #51f3d0;
+            /* color: #276e77; */
+        }
+        .channel {
+            margin-right: 10px;
+            color: #276e77;
+        }
+
+        .movement-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            width: 60%;
+            height: 20%;
+            margin-top: 15px;
+            background-color: #70b4a5;
+            border-radius: 50px;
+            border-style: outset;
+            border-width: 5px;
+            border-color: #37c9a9;
+        }
+        .up-btn, .left-btn, .right-btn, .down-btn {
+            width: 20%;
+            border-radius: 10px;
+            border-color: rgb(215, 215, 215);
+            background-color: #5cbba6;
+            width: auto;
+            color: #e0eae8;
+        }
+        .up-btn {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .left-btn {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        .ok-btn {
+            grid-column: 2;
+            grid-row: 2;
+            border-radius: 50px;
+            border-color: rgb(197, 196, 196);
+            background-color: #77bfaf;
+            color: #e0eae8;
+        }
+        .right-btn {
+            grid-column: 3;
+            grid-row: 2;
+        }
+        .down-btn {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .controller-container {
+            display: flex;
+            flex-direction: row;
+            width: 80%;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .channel-container, .volume-container {
+            display: flex;
+            flex-direction: column;
+            border: 2px outset #65c9b3;
+            border-left: 2px outset #27b496;
+            border-right: 2px outset #36d2b0;
+            border-radius: 8px;
+        }
+
+        .vol-down-btn, .chnl-down-btn {
+            border-color: rgb(220, 220, 220);
+            border-bottom: 15px outset #65c9b3;
+            border-left: 10px solid #24b192;;
+            border-right: 10px solid #24b192;;
+            height: 0;
+            width: 50px;
+            background-color: #24b192;
+        }
+        .vol-up-btn, .chnl-up-btn {
+            border-color: rgb(220, 220, 220);
+            border-top: 15px solid #5cbba6;
+            border-left: 10px solid #24b192;;
+            border-right: 10px solid #24b192;;
+            height: 0;
+            width: 50px;
+            background-color: #29c4a2;
+            text-align: justify;
+        }
+        .vol-up-btn .p, .vol-down-btn .p, .chnl-up-btn .p, .chnl-down-btn .p {
+            margin: 0;
+            padding: 0;
+            color: #e0eae8;
+        }
+        .vol-up-btn .p, .chnl-up-btn .p {
+            position: relative;
+            top: -16px;
+            left: 6px;
+        }
+        .vol-down-btn .p, .chnl-down-btn .p {
+            position: relative;
+            top: 2px;
+            left: 0px;
+        }
+
+        .vol-down-btn:active, .chnl-down-btn:active {
+            border-bottom: 10px outset #5cbba6;
+            border-left: 10px solid #24b192;;
+            border-right: 10px solid #24b192;;
+            height: 0;
+            width: 50px;
+            background-color: #24b192;
+        }
+        .vol-up-btn:active, .chnl-up-btn:active {
+            border-top: 10px solid #5cbba6;
+            border-left: 10px solid #24b192;;
+            border-right: 10px solid #24b192;;
+            height: 0;
+            width: 50px;
+            background-color: #24b192;
+        }
+        .vol-up-btn:active .p, .chnl-up-btn:active .p {
+            font-size: 0.8em;
+            top: -16px;
+            left: 8px;
+        }
+        .chnl-up-btn:active .p {
+            left: 7px;
+            top: -16.5px;
+        }
+        .vol-down-btn:active .p, .chnl-down-btn:active .p {
+            position: relative;
+            font-size: 0.7em;
+            top: 0px;
+            left: 0px;
+        }
+
+        .battery-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 60%;
+            height: 164px;
+            margin-top: 40px;
+            background-color: #66978d;
+            border-radius: 5px;
+            border-style: inset;
+            border-width: 3.5px;
+            border-color: #29c09f;
+        }
+        .battery-container .hl {
+            height: 5px;
+            width: auto;
+            background-color: #2fb598;
+            margin: 5px;
+            border-radius: 1px;
+            border-style: dotted;
+            border-width: 2px;
+            border-color: #24b192;
+        }
+
+        .laser {
+            position: absolute;
+            top: -20px;
+            border-top: 50px solid #d50c0c;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            height: 0;
+            width: 60%;
+            z-index: -1; 
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="remote-body">
+        <div class="laser hidden"></div>
+
+        <button class="power-btn" id="powerBtn">
+            OFF
+        </button>
+
+        <div class="activity-screen">
+            <div class="volume">
+                <div class="hl"></div>
+                <div class="hl"></div>
+                <div class="hl"></div>
+                <div class="hl"></div>
+                <div class="hl"></div>
+            </div>
+
+            <div class="activity">
+            </div>
+
+            <div class="channel">
+                1
+            </div>
+        </div>
+
+        <div class="movement-container">
+            <button class="up-btn" id="upBtn">
+                &uarr;
+            </button>
+
+            <button class="left-btn" id="leftBtn">
+                &larr;
+            </button>
+
+            <button class="ok-btn" id="okBtn">
+                OK
+            </button>
+
+            <button class="right-btn" id="rightBtn">
+                &rarr;
+            </button>
+
+            <button class="down-btn" id="downBtn">
+                &darr;
+            </button>
+        </div>
+
+        <div class="controller-container">
+            <div class="volume-container">
+                <button class="vol-up-btn" id="volUpBtn">
+                    <span class="p">+</span>
+                </button>
+
+                <button class="vol-down-btn" id="volDownBtn">
+                    <span class="p">-</span>
+                </button>
+            </div>
+
+            <div class="channel-container">
+                <button class="chnl-up-btn" id="chnlUpBtn">
+                    <span class="p">&uarr;</span>
+                </button>
+
+                <button class="chnl-down-btn" id="chnlDownBtn">
+                    <span class="p">&darr;</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="battery-container" id="battery">
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+            <div class="hl"></div>
+        </div>
+    </div>
+    <script>
+class Remote {
+    constructor() {
+        this.battery = 100;
+        this.laserTime = 150; //ms
+        this.screenTime = 2000; //ms
+        this.screenInterval = null;
+        this.tvOn = document.getElementById('powerBtn').innerText === 'On';
+        this.volume = 5;
+        this.maxVolume = 5;
+        this.channel = 1;
+        this.channelsAvailable = 9;
+
+        this.powerBtn_el = document.getElementById('powerBtn');
+        this.laser_el = document.querySelector('.laser');
+        this.battery_el = document.getElementById('battery');
+        this.battery_bars_el = reverseArray(this.battery_el.querySelectorAll('.hl'));
+        this.vol_bars_el = reverseArray(document.querySelector('.volume').querySelectorAll('.hl'));
+        this.channel_el = document.querySelector('.channel');
+
+        this.buttonClickHandlers = {
+            powerBtn: this.handlePowerBtnClick.bind(this),
+            volUpBtn: this.handleVolUpBtnClick.bind(this),
+            volDownBtn: this.handleVolDownBtnClick.bind(this),
+            chnlUpBtn: this.handleChnlUpBtnClick.bind(this),
+            chnlDownBtn: this.handleChnlDownBtnClick.bind(this),
+        };
+
+        this.screenTexts = {
+            powerBtn: ['OFF', 'ON'],
+            upBtn: '&uarr;',
+            leftBtn: '&larr;',
+            okBtn: 'OK',
+            rightBtn: '&rarr;',
+            downBtn: '&darr;',
+            volUpBtn: '+',
+            volDownBtn: '-',
+            chnlUpBtn: 'Ch&uarr;',
+            chnlDownBtn: 'Ch&darr;',
+        };
+
+        document.querySelectorAll('button').forEach(button => {
+            // Ieslēdz lāzeri, kad uzspiež uz pogas un atsāj ieslēgtu uz neilgu brīdi(laserTime) pēc atlaišanas
+            button.addEventListener('mousedown', this.buttonDown.bind(this));
+            button.addEventListener('mouseup', this.buttonUp.bind(this));
+        });
+
+        this.updateBattery();
+    }
+
+    buttonDown(event) {
+        if (this.battery <= 0) {
+            console.log('No battery');
+            return;
+        }
+
+        const button = event.currentTarget;
+        const buttonID = button.id;
+        if (this.buttonClickHandlers[buttonID]) {
+            this.buttonClickHandlers[buttonID]();
+        }
+
+        console.log(`Button clicked: ${buttonID}`);
+
+        this.showScreenActivity(buttonID);
+        this.laserOn();
+        this.drainBattery();
+
+    }
+
+    buttonUp() {
+        this.laserOff();
+        this.fadeScreenActivity();
+    }
+    
+    laserOn() {
+        if (this.battery <= 0) {
+            return;
+        }
+        this.laser_el.classList.remove('hidden');
+    }
+
+    laserOff() {
+        // wait
+        setTimeout(() => {
+            this.laser_el.classList.add('hidden');
+        }, this.laserTime);
+    }
+
+    // laserFlash() {
+    //     this.laserOn();
+    //     setTimeout(() => { // izslēdz lāzeri pēc noteikta laika (150ms)
+    //         this.laserOff();
+    //     }, this.laserTime);
+    // }
+
+    handlePowerBtnClick() {
+        // console.log('Power button clicked');
+        if (this.tvOn) {
+            this.powerBtn_el.innerText = 'OFF';
+            this.tvOn = false;
+        } else {
+            this.powerBtn_el.innerText = 'ON';
+            this.tvOn = true;
+        }
+    }
+
+    handleVolUpBtnClick() {
+        // console.log('Volume up button clicked');
+        if (this.volume < this.maxVolume) {
+            this.volume++;
+            this.vol_bars_el.forEach((bar, index) => {
+                if (index < this.volume) {
+                    bar.style.backgroundColor = '#b5be2e';
+                }
+            });
+        }
+    }
+
+    handleVolDownBtnClick() {
+        // console.log('Volume down button clicked');
+
+        if (this.volume > 0) {
+            this.volume--;
+            this.vol_bars_el.forEach((bar, index) => {
+                if (index >= this.volume) {
+                    bar.style.backgroundColor = '#66978d';
+                }
+            });
+        }
+    }
+
+    handleChnlUpBtnClick() {
+        // console.log('Channel up button clicked');
+        if (this.channel < this.channelsAvailable) {
+            this.channel++;
+            this.channel_el.innerText = this.channel;
+        } else {
+            this.channel = 1;
+            this.channel_el.innerText = this.channel;
+        }
+    }
+
+    handleChnlDownBtnClick() {
+        // console.log('Channel down button clicked');
+        if (this.channel > 1) {
+            this.channel--;
+            this.channel_el.innerText = this.channel;
+        } else {
+            this.channel = this.channelsAvailable;
+            this.channel_el.innerText = this.channel;
+        }
+    }
+
+    drainBattery(amount = 2) {
+        this.battery -= amount;
+        this.updateBattery();
+    }
+
+    updateBattery() {
+        let batteryBars = this.battery_bars_el;
+        console.log('Battery:', this.battery, '%')
+
+        // Samazina baterijas līmeni vizuāli
+        batteryBars.forEach((bar, index) => {
+            if (index > Math.floor(this.battery / 10)) {
+                bar.style.backgroundColor = '#66978d';
+            }
+        });
+
+        if (this.battery <= 0) {
+            batteryBars.forEach(bar => {
+                bar.style.backgroundColor = '#66978d';
+            });
+        }
+    }
+
+    showScreenActivity(buttonID) {
+        let activity = document.querySelector('.activity');
+        activity.style.opacity = 1;
+        if (this.screenInterval) {
+            clearInterval(this.screenInterval);
+        }
+        let text = '';
+        if (buttonID === 'powerBtn') {
+            text = this.screenTexts[buttonID][this.tvOn ? 1 : 0];
+        } else {
+            text = this.screenTexts[buttonID];
+        }
+
+        activity.innerHTML = text;
+    }
+
+    fadeScreenActivity() {
+        let activity = document.querySelector('.activity');
+        if (this.screenInterval){
+            clearInterval(this.screenInterval);
+        }
+
+        let step = 0.1;
+        this.screenInterval = setInterval(() => {
+            if (activity.style.opacity > 0) {
+                activity.style.opacity -= step;
+            }
+        }, 100);
+    }
+}
+
+function reverseArray(array) {
+    let reverse = [];
+    for (let i = array.length - 1; i >= 0; i--) {
+        reverse.push(array[i]);
+    }
+    return reverse;
+}
+
+const remote = new Remote();
+
+    </script>
+  </body>
+</html>
